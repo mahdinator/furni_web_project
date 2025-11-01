@@ -1,0 +1,82 @@
+<%- include('partials/header') %> <%- include('partials/navbar') %>
+<script src="/js/shoplogic.js"></script>
+
+<!-- Hero Section -->
+<div class="hero">
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-5">
+        <div class="intro-excerpt">
+          <h1>Shop</h1>
+        </div>
+      </div>
+      <div class="col-lg-7"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Section -->
+<div class="untree_co-section product-section before-footer-section">
+  <div class="container">
+    <div class="row">
+      <!--filter start-->
+      <div class="row mb-4 align-items-end">
+
+        <div class="col-md-3">
+          <label for="search" class="form-label">Search</label>
+          <input type="text" id="search" class="form-control" placeholder="Search products..." value="<%= query || '' %>">
+        </div>
+
+        <div class="col-md-3">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" class="form-select">
+            <option value="" <%= !category ? "selected" : "" %>>All</option>
+            <option value="Chair" <%= category === "Chair" ? "selected" : "" %>>Chair</option>
+            <option value="Table" <%= category === "Table" ? "selected" : "" %>>Table</option>
+            <option value="Sofa" <%= category === "Sofa" ? "selected" : "" %>>Sofa</option>
+            <option value="Bed" <%= category === "Bed" ? "selected" : "" %>>Bed</option>
+            <option value="Cabinet" <%= category === "Cabinet" ? "selected" : "" %>>Cabinet</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label for="price-min" class="form-label">Min Price ($)</label>
+          <input type="range" id="price-min" class="form-range" min="1" max="5000" value="<%= min || 1 %>">
+          <input type="number" id="price-min-value" class="form-control mt-2" min="1" max="5000" value="<%= min || 1 %>">
+        </div>
+
+        <div class="col-md-2">
+          <label for="price-max" class="form-label">Max Price ($)</label>
+          <input type="range" id="price-max" class="form-range" min="0" max="5000" value="<%= max || 5000 %>">
+          <input type="number" id="price-max-value" class="form-control mt-2" min="0" max="5000" value="<%= max || 5000 %>">
+        </div>
+
+        <div class="col-md-2 d-flex justify-content-end">
+          <button id="search-btn" class="btn btn-dark w-100">Search</button>
+        </div>
+      </div>
+
+
+      <!--filter end-->
+
+
+      <!--products start-->
+      <% products.forEach(p => { %>
+      <div class="col-12 col-md-4 col-lg-3 mb-5">
+        <a class="product-item" href="/product/<%= p.id %>">
+          <img src="/images/<%= p.image %>" class="img-fluid product-thumbnail" alt="<%= p.name %>" />
+          <h3 class="product-title"><%= p.name %></h3>
+          <strong class="product-price">$<%= p.price %></strong>
+          <!-- added id to cross so it uses it to add to shoping cart -->
+          <span class="icon-cross" data-id="<%= p.id %>">
+            <img src="/images/cross.svg" class="img-fluid" />
+          </span>
+        </a>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- products end-->
+<%- include('partials/footer') %>

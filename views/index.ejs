@@ -1,0 +1,61 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="hero">
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-5">
+        <div class="intro-excerpt">
+          <h1>Modern Interior <span class="d-block">Design Studio</span></h1>
+          <p class="mb-4">Try your furniture before you buy!</p>
+          <p>
+            <a href="/shop" class="btn btn-secondary me-2">Shop Now</a>
+            <a href="#" class="btn btn-white-outline">Explore</a>
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="hero-img-wrap">
+          <img src="/images/couch.png" class="img-fluid" alt="Couch">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product and rest of the sections go here unchanged -->
+<!-- (just fix image and link paths like /images/..., /shop, /cart, etc.) -->
+
+<!-- products cards: -->
+<div class="product-section">
+  <div class="container">
+    <div class="row">
+
+      <!-- Left column (text + button) -->
+      <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+        <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
+        <p class="mb-4">wooden furniture at its finest. Different designs to fit your needs</p>
+        <p><a href="/shop" class="btn">Explore</a></p>
+      </div>
+
+      <!-- Dynamic products -->
+      <% products.forEach(p => { %>
+        <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+          <a class="product-item" href="/shop">
+            <img src="/images/<%= p.image %>" class="img-fluid product-thumbnail" alt="<%= p.name %>">
+            <h3 class="product-title"><%= p.name %></h3>
+            <strong class="product-price">$<%= p.price %></strong>
+
+            <span class="icon-cross">
+              <img src="/images/cross.svg" class="img-fluid">
+            </span>
+          </a>
+        </div>
+      <% }) %>
+
+    </div>
+  </div>
+</div>
+
+
+<%- include('partials/footer') %>
