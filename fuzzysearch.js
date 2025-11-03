@@ -16,11 +16,16 @@ export function fuzzyFilter(products, query) {
       { name: "name", weight: 0.8 },
       { name: "description", weight: 0.2 },
     ],
-    threshold: 0.5, // lower = stricter
-    distance: 50, // max edit distance
-    includeScore: true, // optional, useful for sorting
+    threshold: 0.6, // increase tolerance (0.4–0.6 works well)
+    distance: 100, // widen acceptable character distance
+    minMatchCharLength: 2, // ignore 1-char noise
+    ignoreLocation: true, // match anywhere in the string
+    includeScore: true,
   });
 
   const results = fuse.search(query);
-  return results.map((r) => r.item);
+
+  // Keep only reasonably close matches (score ≤ 0.4)
+  return results.filter((r) => r.score <= 0.6).map((r) => r.item);
+  //return results.map((r) => r.item);
 }
