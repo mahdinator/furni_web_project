@@ -8,17 +8,34 @@
 
     <div class="collapse navbar-collapse" id="navbarsFurni">
       <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-        <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-        <li><a class="nav-link" href="/shop">Shop</a></li>
-        <li><a class="nav-link" href="/about">About</a></li>
-        <li><a class="nav-link" href="/services">Services</a></li>
-        <li><a class="nav-link" href="/blog">Blog</a></li>
-        <li><a class="nav-link" href="/contact">Contact</a></li>
-      </ul>
+        <li class="nav-item "><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a href="/shop" class="nav-link">Shop</a></li>
+        <li class="nav-item"><a href="/cart" class="nav-link">Cart</a></li>
 
-      <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-        <li><a class="nav-link" href="#"><img src="/images/user.svg" alt="User"></a></li>
-        <li><a class="nav-link" href="/cart"><img src="/images/cart.svg" alt="Cart"></a></li>
+
+        <% if (user) { %>
+        <li class="nav-item"><a href="/orders" class="nav-link">Orders</a></li>
+        <li class="nav-item"><span class="nav-link"> Welcome, <%= user.username %></span></li>
+        <% if (user.role === "admin") { %>
+        <li class="nav-item">
+          <button class="btn btn-outline-dark" onclick="window.location.href='/admin/dashboard'">
+            Admin Panel
+          </button>
+
+        </li>
+        <% } %>
+        <li class="nav-item">
+          <form action="/api/auth/logout" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-outline-dark">Logout</button>
+          </form>
+        </li>
+        <% } else { %>
+        <li class="nav-item">
+          <button class="btn btn-dark mx-2" onclick="window.location.href='api/auth/login'">
+            Login / Register
+          </button>
+        </li>
+        <% } %>
       </ul>
     </div>
   </div>

@@ -1,0 +1,100 @@
+<%- include("partials/header") %>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Order #<%= order.order_id %></h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5>User Information</h5>
+      <p><strong>Name:</strong> <%= order.username %></p>
+      <p><strong>Email:</strong> <%= order.email %></p>
+      <p><strong>Total:</strong> $<%= order.total.toFixed(2) %></p>
+      <p><strong>Date:</strong> <%= new Date(order.created_at).toLocaleString() %></p>
+    </div>
+  </div>
+
+  <h4>Items</h4>
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.forEach(item => { %>
+        <tr>
+          <td><%= item.name %></td>
+          <td><%= item.quantity %></td>
+          <td>$<%= item.price.toFixed(2) %></td>
+          <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-4">
+    <a href="/admin/orders" class="btn btn-secondary">← Back</a>
+  </div>
+</div>
+
+<%- include(<%- include("partials/header") %>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Order #<%= order.order_id %></h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5>User Information</h5>
+      <p><strong>Name:</strong> <%= order.username %></p>
+      <p><strong>Email:</strong> <%= order.email %></p>
+
+      <!-- FIXED TOTAL -->
+      <p><strong>Total:</strong> $<%= Number(order.total_amount).toFixed(2) %></p>
+
+      <p><strong>Date:</strong> <%= new Date(order.created_at).toLocaleString() %></p>
+    </div>
+  </div>
+
+  <h4>Items</h4>
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.forEach(item => { %>
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <img src="/images/<%= item.image %>" 
+                   alt="<%= item.name %>" 
+                   style="width: 60px; border-radius: 6px;">
+              <span><%= item.name %></span>
+            </div>
+          </td>
+
+          <td><%= item.quantity %></td>
+
+          <td>$<%= Number(item.price).toFixed(2) %></td>
+
+          <td>$<%= (Number(item.price) * item.quantity).toFixed(2) %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-4">
+    <!-- FIXED BACK BUTTON -->
+    <a href="/orders/admin/all" class="btn btn-secondary">← Back</a>
+  </div>
+</div>
+
+<%- include("partials/footer") %>
+"partials/footer") %>

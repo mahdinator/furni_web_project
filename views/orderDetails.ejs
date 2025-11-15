@@ -1,0 +1,51 @@
+<%- include("partials/header") %>
+
+<div class="untree_co-section mt-5">
+  <div class="container">
+    <div class="row justify-content-center text-center mb-4">
+      <div class="col-lg-8">
+        <h2 class="section-title">Order #<%= order.id %></h2>
+        <p class="text-muted">Placed on <%= new Date(order.created_at).toLocaleString() %></p>
+        <p class="lead">Total: <strong>$<%= order.total_amount %></strong></p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-3">
+          <div class="card-body">
+            <h4 class="mb-3">Items in this Order</h4>
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% items.forEach(item => { %>
+                    <tr>
+                      <td><%= item.name %></td>
+                      <td><%= item.quantity %></td>
+                      <td>$<%= item.price %></td>
+                      <td>$<%= (item.price * item.quantity) %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <a href="/orders" class="btn btn-outline-secondary">← Back to My Orders</a>
+          <a href="/shop" class="btn btn-dark ms-2">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

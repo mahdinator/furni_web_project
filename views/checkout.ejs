@@ -1,0 +1,106 @@
+<%- include("partials/header") %>
+
+<style>
+  .checkout-box {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+  }
+  .checkout-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #2d5c51;
+  }
+  .checkout-items {
+    margin-bottom: 25px;
+  }
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e1e1e1;
+  }
+  .item-row img {
+    width: 70px;
+    border-radius: 6px;
+    margin-right: 15px;
+  }
+  .item-info {
+    display: flex;
+    align-items: center;
+  }
+  .checkout-total {
+    text-align: right;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2d5c51;
+    margin-bottom: 25px;
+  }
+  .pay-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .btn-checkout {
+    background: #2d5c51;
+    border: none;
+    padding: 12px 20px;
+    width: 100%;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  .btn-checkout:hover {
+    background: #234b42;
+  }
+</style>
+
+<div class="checkout-box">
+
+  <h2 class="checkout-title">🧾 Checkout</h2>
+
+  <!-- 🟦 CART SUMMARY -->
+  <div class="checkout-items">
+    <% cartItems.forEach(item => { %>
+      <div class="item-row">
+        <div class="item-info">
+          <img src="/images/<%= item.image %>" alt="">
+          <div>
+            <strong><%= item.name %></strong><br>
+            Qty: <%= item.quantity %>
+          </div>
+        </div>
+        <div>
+          $<%= (item.price * item.quantity).toFixed(2) %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- 🟩 TOTAL -->
+  <div class="checkout-total">
+    Total: $<%= total.toFixed(2) %>
+  </div>
+
+  <!-- 🟧 PAYMENT METHOD (FIXED) -->
+  <form action="/cart/checkout" method="POST">
+    <div class="mb-3">
+      <label class="pay-label">Payment Method</label>
+      <select name="payment_method" class="form-select" required>
+        <option value="Cash on Delivery">Cash on Delivery</option>
+        <option value="Visa">Visa</option>
+        <option value="MasterCard">MasterCard</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn-checkout">✔ Confirm & Place Order</button>
+  </form>
+
+</div>
+
+<%- include("partials/footer") %>

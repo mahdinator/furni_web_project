@@ -1,0 +1,318 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eaf1ec;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2d5c51;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { margin: 0; font-size: 22px; }
+    header button {
+      background: #fff;
+      color: #2d5c51;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+    header button:hover { background: #cce3db; }
+
+    h2, h3 { text-align: center; color: #2d5c51; }
+
+    table {
+      border-collapse: collapse;
+      width: 95%;
+      margin: 20px auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #2d5c51;
+      color: #fff;
+    }
+
+    button.action {
+      margin: 2px;
+      padding: 5px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+    }
+    .delete { background: #e74c3c; }
+    .promote { background: #27ae60; }
+    .suspend { background: #e67e22; }
+    .unsuspend { background: #8e44ad; }
+    .edit { background: #3498db; }
+    .add { background: #2d5c51; }
+
+    .container {
+      width: 95%;
+      margin: auto;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      background: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      width: 90%;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #editModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    #editModal .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      max-width: 90%;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>👑 Admin Dashboard</h1>
+
+  <div>
+
+    <!-- 📜 VIEW LOGS -->
+    <button onclick="window.location.href='/admin/logs'">📜 View Logs</button>
+
+    <!-- 📦 VIEW ORDERS (NEW!) -->
+    <button onclick="window.location.href='/admin/orders'">📦 View Orders</button>
+
+    <button onclick="window.location.href='/'">🏠 Home</button>
+
+    <form action="/api/auth/logout" method="POST" style="display:inline;">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
+</header>
+
+<div class="container">
+
+  <h2>Welcome, <%= user.username %>!</h2>
+
+  <!-- ADD PRODUCT -->
+  <h3>➕ Add Product</h3>
+  <form id="addProductForm" onsubmit="return addProduct(event)">
+    <input type="text" name="name" placeholder="Product Name" required />
+    <input type="text" name="description" placeholder="Description" required />
+    <input type="number" name="price" placeholder="Price" step="0.01" min="0" required />
+    <input type="text" name="image" placeholder="Image URL" />
+    <input type="text" name="model3d" placeholder="3D Model URL" />
+    <input type="text" name="category" placeholder="Category" />
+    <input type="number" name="quantity" placeholder="Quantity" required />
+    <select name="is_featured">
+      <option value="0">Not Featured</option>
+      <option value="1">Featured</option>
+    </select>
+    <button type="submit" class="add action">Add</button>
+  </form>
+
+  <!-- PRODUCT TABLE -->
+  <h3>🛋️ Products</h3>
+  <table id="productsTable">
+    <tr>
+      <th>ID</th><th>Name</th><th>Description</th><th>Price</th>
+      <th>Category</th><th>Qty</th><th>Featured</th><th>Actions</th>
+    </tr>
+
+    <% products.forEach(p => { %>
+    <tr id="row-<%= p.id %>">
+      <td><%= p.id %></td>
+      <td><%= p.name %></td>
+      <td><%= p.description %></td>
+      <td>$<%= p.price %></td>
+      <td><%= p.category %></td>
+      <td><%= p.quantity %></td>
+      <td><%= p.is_featured ? "✅" : "❌" %></td>
+      <td>
+        <button class="edit action" onclick='openEditModal(<%= JSON.stringify(p) %>)'>Edit</button>
+        <button class="delete action" onclick="deleteProduct(<%= p.id %>)">Delete</button>
+      </td>
+    </tr>
+    <% }) %>
+  </table>
+
+  <!-- USER TABLE -->
+  <h3>👥 Users</h3>
+  <table>
+    <tr>
+      <th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Suspended</th><th>Actions</th>
+    </tr>
+
+    <% users.forEach(u => { %>
+    <tr>
+      <td><%= u.id %></td>
+      <td><%= u.username %></td>
+      <td><%= u.email %></td>
+      <td><%= u.role %></td>
+      <td><%= u.suspended ? "⛔ Yes" : "✅ No" %></td>
+
+      <td>
+
+        <% if (u.role === 'user') { %>
+          <button class="promote action" onclick="promoteUser(<%= u.id %>)">Promote</button>
+        <% } else { %>
+          <button class="promote action" onclick="demoteUser(<%= u.id %>)">Demote</button>
+        <% } %>
+
+        <% if (u.suspended) { %>
+          <button class="unsuspend action" onclick="unsuspendUser(<%= u.id %>)">Unsuspend</button>
+        <% } else { %>
+          <button class="suspend action" onclick="suspendUser(<%= u.id %>)">Suspend</button>
+        <% } %>
+
+        <button class="edit action" onclick="resetPassword(<%= u.id %>)">Reset Password</button>
+
+        <button class="delete action" onclick="deleteUser(<%= u.id %>)">Delete</button>
+
+      </td>
+    </tr>
+    <% }) %>
+
+  </table>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div id="editModal">
+  <div class="modal-content">
+    <h3>✏️ Edit Product</h3>
+    <form id="editProductForm" onsubmit="return saveEdit(event)">
+      <input type="hidden" name="id" />
+      <input type="text" name="name" placeholder="Product Name" required />
+      <input type="text" name="description" placeholder="Description" required />
+      <input type="number" name="price" placeholder="Price" step="0.01" min="0" required />
+      <input type="text" name="image" placeholder="Image URL" />
+      <input type="text" name="model3d" placeholder="3D Model URL" />
+      <input type="text" name="category" placeholder="Category" />
+      <input type="number" name="quantity" placeholder="Quantity" required />
+      <select name="is_featured">
+        <option value="0">Not Featured</option>
+        <option value="1">Featured</option>
+      </select>
+
+      <button type="submit" class="add action">Save</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+/*********** PRODUCT FUNCTIONS ***********/
+async function addProduct(e) {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  const res = await fetch("/admin/products", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify(data) });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+
+async function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+  const res = await fetch(`/admin/products/${id}`, { method:"DELETE" });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+
+function openEditModal(p) {
+  const f = document.getElementById("editProductForm");
+  for (const k in p) if (f[k]) f[k].value = p[k];
+  document.getElementById("editModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+async function saveEdit(e) {
+  e.preventDefault();
+  const f = e.target;
+  const id = f.id.value;
+  const data = Object.fromEntries(new FormData(f).entries());
+  const res = await fetch(`/admin/products/${id}`, { method:"PUT", headers:{ "Content-Type":"application/json" }, body:JSON.stringify(data) });
+  const json = await res.json(); alert(json.message); closeModal(); location.reload();
+}
+
+/*********** USER FUNCTIONS ***********/
+async function promoteUser(id) {
+  const res = await fetch(`/admin/users/${id}/role`, { method:"PUT", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ role:"admin" }) });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+
+async function demoteUser(id) {
+  const res = await fetch(`/admin/users/${id}/role`, { method:"PUT", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ role:"user" }) });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+
+async function suspendUser(id) {
+  if (!confirm("Suspend this user?")) return;
+  const res = await fetch(`/admin/users/${id}/suspend`, { method:"PUT" });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+
+async function unsuspendUser(id) {
+  const res = await fetch(`/admin/users/${id}/unsuspend`, { method:"PUT" });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+
+async function resetPassword(id) {
+  const newPass = prompt("Enter a NEW password:");
+  if (!newPass) return alert("Password cannot be empty.");
+  const res = await fetch(`/admin/users/${id}/reset-password`, {
+    method:"PUT",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({ newPassword:newPass })
+  });
+  const json = await res.json(); alert(json.message);
+}
+
+async function deleteUser(id) {
+  if (!confirm("Delete this user?")) return;
+  const res = await fetch(`/admin/users/${id}`, { method:"DELETE" });
+  const json = await res.json(); alert(json.message); location.reload();
+}
+</script>
+
+</body>
+</html>

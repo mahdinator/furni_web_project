@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | Furni</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f4f6f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+    .register-box {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    .btn-primary {
+      background-color: #2d5c51;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #264f46;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-box">
+    <h2 class="text-center mb-4">Create an Account</h2>
+
+    <% if (error) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+    <% if (typeof message !== "undefined" && message) { %>
+      <div class="alert alert-success"><%= message %></div>
+    <% } %>
+
+    <form action="/api/auth/register" method="POST">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" id="username" name="username" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" id="email" name="email" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+
+    <p class="text-center mt-3">
+      Already have an account? <a href="/api/auth/login">Login here</a>
+    </p>
+  </div>
+
+</body>
+</html>

@@ -854,3 +854,54 @@ textarea {
   background-color: green !important;   /* bright flash color */
   box-shadow: 0 0 10px rgba(249, 191, 41, 0.6);
 }
+
+
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.quantity-input {
+  text-align: center;
+}
+
+
+/* 🧮 Quantity Button Styles */
+.quantity-control {
+  gap: 5px;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  line-height: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+  background-color: #000;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.quantity-display {
+  width: 45px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+  border-radius: 6px;
+}

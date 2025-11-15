@@ -6,14 +6,14 @@ module.exports = {
   // if it wasn't modified during the request
   resave: false,
 
-  // Save new sessions even if they are empty (no data yet)
-  // If you set this to false, sessions won't be stored until something is added
-  saveUninitialized: true,
+  // Do NOT save sessions until user actually logs in
+  saveUninitialized: false,
 
   // Settings for the cookie that stores the session ID on the client
   cookie: {
-    // For local development, keep secure: false (HTTP)
-    // In production with HTTPS, set secure: true to enforce HTTPS-only cookies
-    secure: false,
+    httpOnly: true, // JS cannot read cookies (protects against XSS)
+    secure: false, // set to true ONLY in production with HTTPS
+    sameSite: "lax", // protects against CSRF
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
   },
 };

@@ -1,0 +1,47 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+
+<div class="untree_co-section mt-5">
+  <div class="container">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-7">
+        <h2 class="section-title">My Orders</h2>
+        <p class="text-muted">See all your previous purchases below</p>
+      </div>
+    </div>
+
+    <% if (orders.length === 0) { %>
+      <div class="text-center">
+        <h4>You haven’t placed any orders yet.</h4>
+        <a href="/shop" class="btn btn-primary mt-3">Shop Now</a>
+      </div>
+    <% } else { %>
+      <div class="row">
+        <% orders.forEach(order => { %>
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+              <div class="card-body">
+                <h5 class="card-title">Order #<%= order.id %></h5>
+
+                <p class="text-muted mb-1">
+                  Total: <strong>$<%= Number(order.total_amount).toFixed(2) %></strong>
+                </p>
+
+                <p class="text-muted">
+                  Date: <%= new Date(order.created_at).toLocaleString() %>
+                </p>
+
+                <a href="/orders/<%= order.id %>" class="btn btn-outline-dark btn-sm">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<%- include("partials/footer") %>

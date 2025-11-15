@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef3f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #254f45;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    header button {
+      background: white;
+      color: #254f45;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    header button:hover {
+      background: #cde2da;
+    }
+
+    h2 {
+      text-align: center;
+      color: #254f45;
+      margin-top: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 95%;
+      margin: 25px auto;
+      background: white;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    }
+
+    th, td {
+      border: 1px solid #bbb;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #254f45;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f6f9f7;
+    }
+
+    .log-details {
+      color: #333;
+      font-size: 14px;
+    }
+
+    .no-logs {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 20px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>📜 Admin Activity Logs</h1>
+
+    <div>
+      <button onclick="window.location.href='/admin/dashboard'">⬅ Back to Dashboard</button>
+
+      <form action="/api/auth/logout" method="POST" style="display:inline;">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <!-- PAGE TITLE -->
+  <h2>Recent Actions</h2>
+
+  <% if (logs.length === 0) { %>
+    <p class="no-logs">There are no activity logs yet.</p>
+  <% } else { %>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Admin</th>
+        <th>Action</th>
+        <th>Details</th>
+        <th>Date</th>
+      </tr>
+
+      <% logs.forEach(log => { %>
+        <tr>
+          <td><%= log.id %></td>
+          <td><%= log.admin_username %></td>
+          <td><strong><%= log.action %></strong></td>
+          <td class="log-details"><%= log.details %></td>
+          <td><%= log.created_at.toLocaleString() %></td>
+        </tr>
+      <% }) %>
+
+    </table>
+
+  <% } %>
+
+</body>
+</html>
